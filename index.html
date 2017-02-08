@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <link rel="stylesheet" href="Style.css">
+  <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://code.angularjs.org/1.2.9/angular.min.js"></script>
+  <script src="app.js"></script>
+</head>
+
+
+<body ng-app="myapp" ng-init="currentPage=1;mode='quiz'">
+  <div id="quiz"  ng-controller="MyController">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12"><h1 class="center">General Knowledge Quiz</h1><hr /></div>
+      </div>
+    </div>
+    
+    
+    <div class="container">
+      <div class="mainDiv" ng-show="mode=='quiz'">
+        <div>
+          <div class="label label-warning">Question {{currentPage}} of 10.</div>
+        <div class="row">
+            <div class="col-md-12">
+              <h2>{{currentPage}}. <span >{{quesData.answers[currentPage-1].Name}}</span></h2>
+            </div>
+          </div>
+		 
+        <div class="row ">
+            <div class="col-md-6" ng-repeat="(key,value) in quesData.answers[currentPage-1].Options">
+              <div class="option" ng-click="onSelect(value.Name)">
+                <button class="button" >{{value.Name}}</button >
+              </div>
+            </div>
+          </div>
+
+          <hr/>
+        <div class="quizNav" >
+            <div>
+              <button class="btn btn-default" ng-click="goTo(1);">First</button>
+              <button class="btn btn-default" ng-click="goTo(currentPage-1);">Prev</button>
+              <button class="btn btn-primary" ng-click="goTo(currentPage+1);">Next</button>
+              <button class="btn btn-default" ng-click="goTo(itemsLength);">Last</button>
+            </div>
+            <br />
+            <pagination  direction-links="false" total-items="itemsLength" items-per-page="1" ></pagination>
+          </div>
+        </div>
+		</div>
+        <div class="container">
+          <div class="row review" ng-show="mode=='review'">
+		  <h2>Review</h2>
+           <div class="col-md-12" >
+            <div ng-repeat="obj in quesData.answers" class="col-md-4" ng-class="{'answered': isAnswered($index), 'not-answered': !isAnswered($index)}" >
+			<div ng-click="backToQues($index)">{{$index + 1}}.{{isAnswered($index)?"answered":"not-answered"}}</div>
+			</div>
+          </div>
+        </div>
+      </div>
+    
+
+    <div class="container">
+      <div class="result" ng-show="mode=='result'">
+        <h2>Quiz Result</h2>
+        <div >
+          <div class="result-question">
+            
+            <div class="row">
+              <div class="col-md-12" ng-repeat="obj in quesData.answers">
+                <h4>Question {{$index+1}}</h4>
+                <!--<div>{{obj.Options}}</div>-->
+                <!--<div>{{ test() }}</div>-->
+                <h4 class="alert {{alertN}}">Your answer is {{ isCorrect(obj.Options) }}</h4>
+              </div>
+            </div>
+           
+          </div>
+        </div>
+        <h4 class="alert alert-info text-center">You may close this window now.</h4>
+      </div>
+    </div>
+    <hr />
+
+    <div class="container">
+      <div class="row">
+        <div class="text-center col-md-12" ng-show="mode!='result'">
+         <button class="btn btn-primary" ng-click="mode='quiz'">quiz</button> 
+         <button class="btn btn-primary" ng-show="mode!='review'" ng-click="onRev()">Review</button> 
+         <button class="btn btn-primary" ng-click="mode='result'">Submit Quiz</button>
+        </div>
+      </div>
+    </div>
+
+ </div>
+</body>
+
+</html>
